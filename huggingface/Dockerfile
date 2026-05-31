@@ -1,6 +1,6 @@
 # Multi-architecture NGC PyTorch base image
 # Supports linux/amd64 and linux/arm64
-FROM nvcr.io/nvidia/pytorch:26.04-py3
+FROM nvcr.io/nvidia/pytorch:25.08-py3
 
 LABEL maintainer="oscar-llm-workshop"
 LABEL description="Multi-arch Phi-3 inference demo with W&B"
@@ -25,4 +25,3 @@ ENV PYTHONUNBUFFERED=1
 ENV WANDB_ANONYMOUS=allow
 
 # Default command runs the inference demo
-CMD ["python", "phi3_inference.py"]
