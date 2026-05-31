@@ -32,6 +32,7 @@ def main():
 
     print("Starting inference loop tracking...")
 
+
     for idx, item in enumerate(eval_dataset):
         prompt = item["prompt"]
         temp = item["temperature"]
@@ -73,12 +74,11 @@ def main():
         print(f"Processed prompt {idx+1}/{len(eval_dataset)} | Speed: {tokens_per_sec:.2f} t/s")
 
         wandb.log({
-            "prompt_index": idx,
-            "temperature": temp,
-            "generation_time_sec": generation_time,
-            "tokens_per_second": tokens_per_sec,
-            "prompt_text": prompt,
-            "generated_response": response_only
+            f"prompt_{idx}": prompt,
+            f"temperature_{idx}": temp,
+            f"generation_time_sec_{idx}": generation_time,
+            f"tokens_per_second_{idx}": tokens_per_sec,
+            f"generated_response_{idx}": response_only
         })
 
     wandb.finish()
