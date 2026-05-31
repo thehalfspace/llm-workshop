@@ -2,7 +2,7 @@ import os
 import time
 import torch
 import wandb
-from transformers import AutoModelForCausalLM, AutoTokenizer
+from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
 
 def main():
     # 1. Initialize Weights & Biases anonymously
@@ -14,17 +14,26 @@ def main():
 
     # 2. Set up the model identifier and load tokenizer
     model_id = "microsoft/Phi-3-mini-4k-instruct"
-    print(f"Loading tokenizer for {model_id}...")
-    tokenizer = AutoTokenizer.from_pretrained(model_id, trust_remote_code=True)
+    model_path = "/oscar/data/shared/bootcamp_2026/llm-workshop/phi3-mini"
+    print(f"Loading tokenizer for {model_path}...")
+    tokenizer = AutoTokenizer.from_pretrained(model_path, local_files_only=True)
 
     print(f"Loading model layers onto GPU...")
     # Load in 4-bit to demonstrate memory-efficient cluster operations
+    quantization_config = BitsAndBytesConfig(
+            load_in_4bit=True,
+            bnb_4bit_compute_dtype=torch.float16,
+            bnb_4bit_use_double_quant=True,
+            bnb_4bit_quant_type="nf4"
+            )
+    
+
     model = AutoModelForCausalLM.from_pretrained(
-        model_id,
+        model_path,
         device_map="auto",
         torch_dtype="auto",
-        load_in_4bit=True,
-        trust_remote_code=True
+        quantization_config=quantization_config,
+        local_files_only=True
     )
 
     # 3. Create a simple test dataset
