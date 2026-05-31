@@ -73,6 +73,16 @@ def main():
 
         print(f"Processed prompt {idx+1}/{len(eval_dataset)} | Speed: {tokens_per_sec:.2f} t/s")
 
+        # 1. Log metrics for CHARTS
+        wandb.log({
+            "prompt_index": idx,
+            "temperature": temp,
+            "generation_time_sec": generation_time,
+            "tokens_per_second": tokens_per_sec,
+            "step": idx,  # Explicit step counter
+        })
+
+        # 2. Log responses
         wandb.log({
             f"prompt_{idx}": prompt,
             f"temperature_{idx}": temp,
