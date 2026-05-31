@@ -1,3 +1,5 @@
 # Python venvs
 
 .venv/
+wandb/
+*.log
